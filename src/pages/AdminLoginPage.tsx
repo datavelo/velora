@@ -121,6 +121,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
             {isLoading ? 'Authenticating...' : 'AUTHENTICATE SESSION'}
           </button>
         </form>
+      </div>
     </div>
   );
 };
