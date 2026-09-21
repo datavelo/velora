@@ -23,12 +23,6 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const STORAGE_KEY = 'velora_user_session';
-const ADMIN_EMAILS = [
-  'chathusandeepani195@gmail.com',
-  'admin@velora.lk',
-  'admin@velora.com',
-];
-
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<AuthUser | null>(() => {
     try {
@@ -46,10 +40,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     if (user) {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
-        if (user.isAdmin) {
-          sessionStorage.setItem('velora_admin_session', 'authenticated');
-        }
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...user, isAdmin: false }));
       } catch (e) {
         console.error('Failed to save session', e);
       }
@@ -66,17 +57,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     return new Promise((resolve) => {
       setTimeout(() => {
-        const targetEmail = customEmail || 'chathusandeepani195@gmail.com';
+        const targetEmail = customEmail || 'customer@gmail.com';
         const targetName =
           customName ||
-          (targetEmail.includes('chathu')
-            ? 'Chathu Sandeepani'
-            : targetEmail.split('@')[0].replace('.', ' ').toUpperCase());
-
-        const isAdmin =
-          ADMIN_EMAILS.includes(targetEmail.toLowerCase()) ||
-          targetEmail.toLowerCase().includes('admin') ||
-          targetEmail.toLowerCase().includes('chathu');
+          targetEmail
+            .split('@')[0]
+            .replace(/[._-]+/g, ' ')
+            .replace(/\b\w/g, (char) => char.toUpperCase());
 
         const newUser: AuthUser = {
           id: `goog_${Date.now()}`,
@@ -86,13 +73,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             targetName
           )}&backgroundColor=0a0a0a&textColor=d4af37`,
           provider: 'google',
-          isAdmin,
+          isAdmin: false,
         };
 
         setUser(newUser);
-        if (isAdmin) {
-          sessionStorage.setItem('velora_admin_session', 'authenticated');
-        }
         setIsLoading(false);
         setIsAuthModalOpen(false);
         resolve(newUser);
@@ -102,7 +86,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signOut = () => {
     setUser(null);
-    sessionStorage.removeItem('velora_admin_session');
     localStorage.removeItem(STORAGE_KEY);
   };
 
@@ -111,7 +94,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       value={{
         user,
         isAuthenticated: !!user,
-        isAdmin: !!user?.isAdmin,
+        isAdmin: false,
         isLoading,
         isAuthModalOpen,
         setIsAuthModalOpen,

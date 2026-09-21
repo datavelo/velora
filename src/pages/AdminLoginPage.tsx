@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Lock, ArrowLeft, KeyRound } from 'lucide-react';
+import { Lock, ArrowLeft } from 'lucide-react';
 import { VeloraLogo } from '../components/common/VeloraLogo';
-import { GoogleSignInButton } from '../components/auth/GoogleSignInButton';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
 interface AdminLoginPageProps {
   onLoginSuccess: () => void;
@@ -12,29 +12,42 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
   onLoginSuccess,
   onNavigateHome,
 }) => {
-  const [email, setEmail] = useState('admin@velora.lk');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    if (!isSupabaseConfigured || !supabase) {
+      setError('Admin authentication is not configured. Set the Supabase environment variables first.');
+      return;
+    }
+
     setIsLoading(true);
 
-    setTimeout(() => {
-      // Accepts default secure admin password or demo password
-      if (
-        (email === 'admin@velora.lk' || email === 'admin') &&
-        (password === 'Velora@2026' || password === 'admin123' || password === 'admin')
-      ) {
-        sessionStorage.setItem('velora_admin_session', 'authenticated');
-        onLoginSuccess();
-      } else {
-        setError('Invalid administrative credentials. Access restricted.');
+    try {
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      });
+
+      if (signInError) throw new Error('Invalid administrative credentials.');
+
+      const { data: isAdmin, error: roleError } = await supabase.rpc('is_admin');
+      if (roleError || !isAdmin) {
+        await supabase.auth.signOut();
+        throw new Error('This account is not authorized for the admin portal.');
       }
+
+      onLoginSuccess();
+    } catch (err: any) {
+      setError(err?.message || 'Unable to authenticate the admin account.');
+    } finally {
       setIsLoading(false);
-    }, 400);
+    }
   };
 
   return (
@@ -70,11 +83,12 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
-              Admin Identifier
+              Admin Email
             </label>
             <input
-              type="text"
+              type="email"
               required
+              autoComplete="username"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-3.5 py-2.5 bg-neutral-800 border border-neutral-700 rounded text-sm text-white focus:outline-none focus:border-gold"
@@ -83,23 +97,21 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
 
           <div>
             <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
-              Secure Key
+              Password
             </label>
             <input
               type="password"
               required
-              placeholder="••••••••••••"
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-3.5 py-2.5 bg-neutral-800 border border-neutral-700 rounded text-sm text-white focus:outline-none focus:border-gold"
             />
-            <div className="mt-2 p-2 bg-neutral-800/50 rounded border border-neutral-700/60 text-[11px] text-neutral-400 flex items-center gap-1.5">
-              <KeyRound className="w-3.5 h-3.5 text-gold shrink-0" />
-              <span>
-                Default Demo Password: <strong className="text-neutral-200">Velora@2026</strong> or <strong className="text-neutral-200">admin123</strong>
-              </span>
-            </div>
           </div>
+
+          <p className="text-[11px] leading-relaxed text-neutral-500">
+            Admin credentials are verified by Supabase. No admin password is stored in the website source code.
+          </p>
 
           <button
             type="submit"
@@ -109,31 +121,6 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
             {isLoading ? 'Authenticating...' : 'AUTHENTICATE SESSION'}
           </button>
         </form>
-
-        {/* Google Sign In at bottom */}
-        <div className="pt-2 border-t border-neutral-800 space-y-3 text-center">
-          <div className="relative flex items-center justify-center">
-            <span className="absolute inset-x-0 h-px bg-neutral-800" />
-            <span className="relative bg-neutral-900 px-3 text-[10px] font-bold uppercase tracking-widest text-neutral-400">
-              Or Sign In With Google
-            </span>
-          </div>
-
-          <GoogleSignInButton
-            variant="light"
-            size="md"
-            className="w-full justify-center shadow-lg"
-            onSuccess={() => {
-              sessionStorage.setItem('velora_admin_session', 'authenticated');
-              onLoginSuccess();
-            }}
-          />
-
-          <p className="text-[10px] text-neutral-400">
-            Authorized Google accounts receive instantaneous verified administrator access.
-          </p>
-        </div>
-      </div>
     </div>
   );
 };
