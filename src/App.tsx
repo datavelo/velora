@@ -8,7 +8,6 @@ import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { CartDrawer } from './components/cart/CartDrawer';
 import { SearchModal } from './components/common/SearchModal';
-import { supabase, isSupabaseConfigured } from './lib/supabase';
 import { GoogleAuthModal } from './components/auth/GoogleAuthModal';
 import { HomePage } from './pages/HomePage';
 import { CollectionPage } from './pages/CollectionPage';
@@ -38,20 +37,9 @@ export default function App() {
   // Search Modal & Admin auth states
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
-
-  useEffect(() => {
-    let mounted = true;
-    const restoreAdminSession = async () => {
-      if (!isSupabaseConfigured || !supabase) return;
-      const { data } = await supabase.auth.getSession();
-      if (!mounted || !data.session) return;
-      const { data: isAdmin, error } = await supabase.rpc('is_admin');
-      if (mounted) setIsAdminAuthenticated(!error && !!isAdmin);
-    };
-    restoreAdminSession();
-    return () => { mounted = false; };
-  }, []);
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(() => {
+    return sessionStorage.getItem('velora_admin_session') === 'authenticated';
+  });
 
   // Reload data from Store helper
   const reloadData = useCallback(() => {
@@ -129,8 +117,8 @@ export default function App() {
   };
 
   // Admin Logout
-  const handleAdminLogout = async () => {
-    if (supabase) await supabase.auth.signOut();
+  const handleAdminLogout = () => {
+    sessionStorage.removeItem('velora_admin_session');
     setIsAdminAuthenticated(false);
     navigate('/');
   };
