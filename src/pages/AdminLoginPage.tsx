@@ -83,7 +83,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
-              Admin Email
+              Username / Admin Email
             </label>
             <input
               type="email"
@@ -110,7 +110,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
           </div>
 
           <p className="text-[11px] leading-relaxed text-neutral-500">
-            Admin credentials are verified by Supabase. No admin password is stored in the website source code.
+            Enter the administrator account credentials configured in Supabase.
           </p>
 
           <button
