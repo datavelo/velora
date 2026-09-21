@@ -68,7 +68,7 @@ SITE_URL=https://velora-storefront.<your-subdomain>.workers.dev
 INSERT INTO public.admin_roles (user_id, role)
 VALUES ('<your-supabase-auth-user-uuid>', 'admin');
 ```
-Also add your email to the `ADMIN_EMAILS` array in `src/context/AuthContext.tsx`.
+The admin email/password is managed by Supabase Auth. Add the Supabase Auth user UUID to `public.admin_roles`; do not store admin credentials in frontend source code.
 
 ---
 
@@ -233,7 +233,6 @@ velora-storefront/
 ## Notes
 
 - The app falls back to **localStorage demo data** when Supabase isn't configured, so you can preview locally without a database.
-- Admin dashboard is at `/admin` — requires Supabase Auth + admin role.
-- Google sign-in is currently mock-based (simulated). For production OAuth, integrate `@supabase/auth-helpers` or Clerk/Auth0.
-- Update `ADMIN_EMAILS` in `src/context/AuthContext.tsx` with your admin email.
+- Admin dashboard is at `/admin` — requires Supabase Auth email/password + admin role.
+- Google sign-in is customer-only and is not accepted by the admin portal.
 - Update `SITE_URL` in `wrangler.toml` to match your domain.
