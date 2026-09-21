@@ -158,12 +158,6 @@ export default function App() {
               onNavigateHome={() => navigate('/')}
             />
           )}
-          <GoogleAuthModal
-            onSuccess={() => {
-              setIsAdminAuthenticated(true);
-              reloadData();
-            }}
-          />
         </AuthProvider>
       </ToastProvider>
     );
