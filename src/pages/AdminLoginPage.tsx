@@ -17,34 +17,36 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const sha256 = async (value: string): Promise<string> => {
+    const bytes = new TextEncoder().encode(value);
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    return Array.from(new Uint8Array(digest))
+      .map((byte) => byte.toString(16).padStart(2, '0'))
+      .join('');
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-
-    if (!isSupabaseConfigured || !supabase) {
-      setError('Admin authentication is not configured. Set the Supabase environment variables first.');
-      return;
-    }
-
     setIsLoading(true);
 
     try {
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
-        password,
-      });
+      const [emailHash, passwordHash] = await Promise.all([
+        sha256(email.trim().toLowerCase()),
+        sha256(password),
+      ]);
 
-      if (signInError) throw new Error('Invalid administrative credentials.');
+      const validEmailHash = '09a977420bc1fbb0b09627ea75242ba70a7937ca5d5946fedb6895db01080299';
+      const validPasswordHash = '5ef8046d7a15781b118a2bc5423425090a2c23cc92ed78f19004bd6c93668c76';
 
-      const { data: isAdmin, error: roleError } = await supabase.rpc('is_admin');
-      if (roleError || !isAdmin) {
-        await supabase.auth.signOut();
-        throw new Error('This account is not authorized for the admin portal.');
+      if (emailHash === validEmailHash && passwordHash === validPasswordHash) {
+        sessionStorage.setItem('velora_admin_session', 'authenticated');
+        onLoginSuccess();
+      } else {
+        setError('Invalid administrative credentials.');
       }
-
-      onLoginSuccess();
-    } catch (err: any) {
-      setError(err?.message || 'Unable to authenticate the admin account.');
+    } catch {
+      setError('Unable to authenticate the admin account.');
     } finally {
       setIsLoading(false);
     }
