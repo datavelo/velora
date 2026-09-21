@@ -12,7 +12,7 @@ not_found_handling = "single-page-application"
 
 # Public non-secret variables
 [vars]
-SITE_URL = "https://velora.lk"
+SITE_URL = "https://velora-storefront.veloralk.workers.dev"
 
 # ─────────────────────────────────────────────────────────
 # SECRET KEYS — set via wrangler (NOT in this file):
