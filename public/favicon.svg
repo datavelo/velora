@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="veloraFavGold" x1="15%" y1="0%" x2="85%" y2="100%">
+      <stop offset="0%" stop-color="#C5A059" />
+      <stop offset="25%" stop-color="#E2C98A" />
+      <stop offset="50%" stop-color="#B88E44" />
+      <stop offset="75%" stop-color="#EBD8A3" />
+      <stop offset="100%" stop-color="#9C732B" />
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="36" fill="#0E0E0E" />
+  <circle cx="100" cy="112" r="44" stroke="url(#veloraFavGold)" stroke-width="12" fill="none" stroke-linecap="round"/>
+  <polygon points="48,34 76,34 100,146 86,146" fill="url(#veloraFavGold)" />
+  <polygon points="84,34 98,34 100,90 92,90" fill="url(#veloraFavGold)" />
+  <polygon points="152,34 124,34 100,146 114,146" fill="url(#veloraFavGold)" />
+</svg>

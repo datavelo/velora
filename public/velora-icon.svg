@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <!-- Metallic Champagne Gold Gradient matching VELORA brand -->
+    <linearGradient id="veloraChampagneGold" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#C5A059" />
+      <stop offset="25%" stop-color="#E2C98A" />
+      <stop offset="50%" stop-color="#B88E44" />
+      <stop offset="75%" stop-color="#EAD7A1" />
+      <stop offset="100%" stop-color="#A5792F" />
+    </linearGradient>
+    <linearGradient id="veloraGoldAccent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#B38728" />
+      <stop offset="50%" stop-color="#FBF5B7" />
+      <stop offset="100%" stop-color="#AA771C" />
+    </linearGradient>
+    <filter id="subtleGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- VELORA Monogram Emblem: Interlocking V and Circle -->
+  <g filter="url(#subtleGlow)">
+    <!-- Golden Interlocking Ring -->
+    <circle 
+      cx="200" 
+      cy="222" 
+      r="72" 
+      fill="none" 
+      stroke="url(#veloraChampagneGold)" 
+      stroke-width="18" 
+      stroke-linecap="round"
+    />
+
+    <!-- Left Arm of 'V': Double-channel / Slotted Diagonal Rail -->
+    <!-- Outer thick diagonal stroke -->
+    <path 
+      d="M 98 75 L 142 75 L 200 248 L 176 248 Z" 
+      fill="url(#veloraChampagneGold)" 
+    />
+    <!-- Parallel Inner diagonal stroke -->
+    <path 
+      d="M 152 75 L 174 75 L 200 152 L 188 152 Z" 
+      fill="url(#veloraChampagneGold)" 
+    />
+
+    <!-- Right Arm of 'V': Solid angled band overlapping circle -->
+    <path 
+      d="M 302 75 L 258 75 L 200 248 L 224 248 Z" 
+      fill="url(#veloraChampagneGold)" 
+    />
+
+    <!-- Intersecting Cutout Accent for dimensional interlocking -->
+    <path 
+      d="M 124 95 L 140 95 L 195 240 L 186 240 Z" 
+      fill="#ffffff" 
+      opacity="0.85" 
+    />
+  </g>
+</svg>

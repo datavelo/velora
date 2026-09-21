@@ -1,0 +1,32 @@
+name = "velora-storefront"
+main = "worker/index.ts"
+compatibility_date = "2024-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Static assets (built frontend from Vite)
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+html_handling = "auto-trailing-slash"
+not_found_handling = "single-page-application"
+
+# Public non-secret variables
+[vars]
+SITE_URL = "https://velora.lk"
+
+# ─────────────────────────────────────────────────────────
+# SECRET KEYS — set via wrangler (NOT in this file):
+#
+#   npx wrangler secret put SUPABASE_URL
+#   npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
+#
+# Or set as GitHub Secrets — the deploy workflow syncs them.
+# ─────────────────────────────────────────────────────────
+
+# Optional: uncomment and set your account ID
+# account_id = "your-cloudflare-account-id"
+
+# Optional: custom domain
+# [[routes]]
+# pattern = "velora.lk"
+# custom_domain = true

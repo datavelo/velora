@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 260" width="100%" height="100%">
+  <defs>
+    <linearGradient id="veloraGoldBrand" x1="15%" y1="0%" x2="85%" y2="100%">
+      <stop offset="0%" stop-color="#C5A059" />
+      <stop offset="25%" stop-color="#E2C98A" />
+      <stop offset="50%" stop-color="#B88E44" />
+      <stop offset="75%" stop-color="#EBD8A3" />
+      <stop offset="100%" stop-color="#9C732B" />
+    </linearGradient>
+  </defs>
+
+  <!-- Gold Monogram Emblem -->
+  <g transform="translate(175, 10) scale(0.75)">
+    <!-- Ring -->
+    <circle cx="100" cy="112" r="44" stroke="url(#veloraGoldBrand)" stroke-width="11" fill="none" stroke-linecap="round"/>
+    <!-- Left Arm -->
+    <polygon points="48,34 76,34 100,146 86,146" fill="url(#veloraGoldBrand)" />
+    <polygon points="84,34 98,34 100,90 92,90" fill="url(#veloraGoldBrand)" />
+    <!-- Right Arm -->
+    <polygon points="152,34 124,34 100,146 114,146" fill="url(#veloraGoldBrand)" />
+  </g>
+
+  <!-- VELORA Serif Wordmark -->
+  <text 
+    x="250" 
+    y="215" 
+    text-anchor="middle" 
+    font-family="'Cinzel', 'Playfair Display', 'Times New Roman', serif" 
+    font-size="62" 
+    font-weight="600" 
+    letter-spacing="14" 
+    fill="#0F0F0F"
+  >VELORA</text>
+</svg>

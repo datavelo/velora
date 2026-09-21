@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-heading: 'Cinzel', serif, system-ui;
+    --font-sans: 'Plus Jakarta Sans', sans-serif, system-ui;
+  }
+  
+  body {
+    font-family: var(--font-sans);
+    color: #111111;
+  }
+
+  h1, h2, h3, .font-heading {
+    font-family: var(--font-heading);
+    letter-spacing: 0.05em;
+  }
+}
+
+/* Custom Gold accents */
+.text-gold {
+  color: #c89b3c;
+}
+.bg-gold {
+  background-color: #c89b3c;
+}
+.border-gold {
+  border-color: #c89b3c;
+}
+
+/* Hide scrollbar for category bars and menus */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* A5 Print Styles */
+@media print {
+  @page {
+    size: A5 portrait;
+    margin: 6mm;
+  }
+  html, body {
+    background: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  body * {
+    visibility: hidden;
+  }
+  #printable-invoice, #printable-invoice * {
+    visibility: visible;
+  }
+  #printable-invoice {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 2mm !important;
+    background: white !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+    border: none !important;
+    page-break-inside: avoid;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
